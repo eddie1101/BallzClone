@@ -11,15 +11,15 @@ public class GameHelper {
 
         PVector vel = ball.getVel();
 
-        if(ball.getPos().x <= 0) {
+        if(ball.getPos().x - Math.sqrt(Ball.R) <= 0) {
             ball.setVel(-vel.x, vel.y);
-        } else if(ball.getPos().x >= 400) {
+        } else if(ball.getPos().x + Math.sqrt(Ball.R) >= 392) {
             ball.setVel(-vel.x, vel.y);
         }
 
-        if(ball.getPos().y <= 0) {
+        if(ball.getPos().y - Math.sqrt(Ball.R) <= 0) {
             ball.setVel(vel.x, -vel.y);
-        } else if(ball.getPos().y >= 800) {
+        } else if(ball.getPos().y + Math.sqrt(Ball.R) >= 800) {
             ball.setVel(vel.x, -vel.y);
         }
 
