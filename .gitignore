@@ -2,5 +2,3 @@
 *.iml
 out
 target
-pom.xml
-.gitignore
