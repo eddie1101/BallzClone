@@ -39,12 +39,12 @@ public class GameHelper {
                 cx = ball.getPos().x, cy = ball.getPos().y,
                 testx = cx, testy = cy;
 
-        if(cx < bx) testx = bx;
-        else if(cx > bx + Grid.CELL_WIDTH) testx = bx + Grid.CELL_WIDTH;
+        if(cx + Math.sqrt(Ball.R) < bx) testx = bx;
+        else if(cx - Math.sqrt(Ball.R)> bx + Grid.CELL_WIDTH) testx = bx + Grid.CELL_WIDTH;
 
 
-        if(cy < by) testy = by;
-        else if(cy > by + Grid.CELL_WIDTH) testy = by + Grid.CELL_WIDTH;
+        if(cy + Math.sqrt(Ball.R) < by) testy = by;
+        else if(cy - Math.sqrt(Ball.R) > by + Grid.CELL_WIDTH) testy = by + Grid.CELL_WIDTH;
 
         float distx = cx - testx;
         float disty = cy - testy;
@@ -77,12 +77,12 @@ public class GameHelper {
 
     }
 
-    public static Griddable[] getPhysicalsInCollisionRange(Ball ball, Griddable[] physicals) {
+    public static Griddable[] getPhysicalsInCollisionRange(Ball ball, Griddable[] physicals, int offset) {
 
         ArrayList<Griddable> physicalsInRange = new ArrayList<Griddable>();
 
         for(Griddable physical: physicals) {
-            if(physical.getPos().dist(ball.getPos()) < 5 + Ball.R + Grid.CELL_WIDTH) {
+            if(physical.getPos().dist(ball.getPos()) < offset + Ball.R + Grid.CELL_WIDTH) {
                 physicalsInRange.add(physical);
             }
         }

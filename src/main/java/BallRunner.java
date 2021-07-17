@@ -73,6 +73,10 @@ public class BallRunner {
         return balls.toArray(retval);
     }
 
+    public PVector getFiringVelocity() {
+        return this.firingVelocity;
+    }
+
     public void addBall(Ball ball) {
         ballBuffer.add(ball);
         this.numBalls++;
@@ -153,7 +157,7 @@ public class BallRunner {
                     idleBalls.add(ball);
             } else {
 
-                Griddable[] testCollisions = GameHelper.getPhysicalsInCollisionRange(ball, physicals);
+                Griddable[] testCollisions = GameHelper.getPhysicalsInCollisionRange(ball, physicals, 5);
 
                 for (Griddable griddable : testCollisions) {
 
