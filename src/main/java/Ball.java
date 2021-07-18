@@ -29,6 +29,10 @@ public class Ball extends Drawable{
         return this.pos;
     }
 
+    public PVector samplePos() {
+        return new PVector(pos.x + vel.x, pos.y + vel.y);
+    }
+
     public void setVel(float x, float y) {
         this.vel = new PVector(x, y);
     }

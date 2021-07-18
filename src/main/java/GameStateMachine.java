@@ -100,8 +100,9 @@ public class GameStateMachine {
                 display.drawBalls(runner.getBalls());
 
                 if (click) {
-                    runner.initialize();
-                    nextState = GameState.RUNNING;
+                    if(runner.initialize()) {
+                        nextState = GameState.RUNNING;
+                    }
                 }
 
                 break;

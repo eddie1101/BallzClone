@@ -34,8 +34,17 @@ public class RayCaster {
         this.target = target;
         this.home = home;
         this.absoluteHome = home;
-        this.step = step;
         dy = (target.y - home.y) / (target.x - home.x);
+
+        if(step == -1) {
+            if(dy > 1) {
+                this.step = 1 / dy;
+            } else {
+                this.step = 1;
+            }
+        } else {
+            this.step = step;
+        }
 
         switx = false;
         swity = false;
@@ -47,7 +56,7 @@ public class RayCaster {
 
     public void rayCast(PVector home, PVector target, float step) {
         initRayCast(home, target, step);
-        if(Math.abs(dy) < 0.01 || step <= 0.01) return;
+        if(Math.abs(dy) < 0.25 || this.step < 0.01) return;
         recursiveRayCast();
     }
 
@@ -61,10 +70,7 @@ public class RayCaster {
 
         while(true) {
 
-            if(y >= pApplet.height) {
-                pApplet.line(home.x, home.y, x, y);
-                return;
-            } else if(x - Math.sqrt(Ball.R) <= 0 || x + Math.sqrt(Ball.R) >= pApplet.width) {
+            if(x - Math.sqrt(Ball.R) <= 0 || x + Math.sqrt(Ball.R) >= pApplet.width) {
                 updateHome();
                 switx = !switx;
                 increment();

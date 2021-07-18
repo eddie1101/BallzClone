@@ -26,7 +26,7 @@ public class Controller extends PApplet {
         gsm.loop();
         if(cheatRay) {
             PVector home = new PVector(gsm.runner().home(), BallRunner.Y);
-            rayCaster.rayCast(home, new PVector(mouseX, mouseY), 1f);
+            rayCaster.rayCast(home, new PVector(mouseX, mouseY), -1f);
         }
     }
 

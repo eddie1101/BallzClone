@@ -30,10 +30,13 @@ public class BallRunner {
         home = this.pApplet.width / 2;
     }
 
-    private void calculateFiringVelocity() {
-        this.firingVelocity = new PVector(pApplet.mouseX - home, pApplet.mouseY - Y)
-                .normalize()
-                .mult(4);
+    private boolean calculateFiringVelocity() {
+        this.firingVelocity = new PVector(pApplet.mouseX - home, pApplet.mouseY - Y);
+//        if(firingVelocity.y / firingVelocity.x < 0.25) {
+//            return false;
+//        }
+        firingVelocity.normalize().mult(4);
+        return true;
     }
 
     private void fireBall(Ball ball) {
@@ -120,7 +123,7 @@ public class BallRunner {
         return true;
     }
 
-    public void initialize() {
+    public boolean initialize() {
         counter = COUNTER_MAX;
         flushBallBuffer();
         firingQueue.addAll(balls);
@@ -130,7 +133,7 @@ public class BallRunner {
             ball.setPos(home, Y);
         }
 
-        calculateFiringVelocity();
+        return calculateFiringVelocity();
     }
 
     public void update(Griddable[] physicals) {
