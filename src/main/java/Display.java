@@ -20,7 +20,19 @@ public class Display {
 //            "全体的に死ぬ、ばか",
             "Just bounce the\nfuckin' balls, it's not\nthat fucking hard",
             "Bella is a ho",
-            "You are a useless\ncrayon"
+            "You are a useless\ncrayon",
+            "You are infertile",
+            "You mayo cricket",
+            "Your mom lost the\n50/50 when she\nhad you",
+            "You have holes\nin your brain",
+            "You were a one\nnight stand",
+            "You peaked in\nmiddle school",
+            "You're a fucking\nloser, how can\nyou suck so much\nat this easy ass\ngame you dumb\nfucking bitch",
+            "Hillbilly",
+            "8====D",
+            "You must be a\ndiscord moderator",
+            "You look like\nSquidward's left\ntentacle",
+            "You are as use-\nless as a fart\nin the wind"
     };
 
     private String insult = null;
@@ -63,7 +75,7 @@ public class Display {
         targetingBalls.add(ball);
     }
 
-    public void drawTargeting(BallRunner runner) {
+    public void handleTargeting(BallRunner runner, boolean draw) {
 
         targetingCounter--;
 
@@ -88,7 +100,9 @@ public class Display {
         }
 
         Ball[] balls = new Ball[targetingBalls.size()];
-        drawBalls(targetingBalls.toArray(balls));
+
+        if(draw)
+            drawBalls(targetingBalls.toArray(balls));
 
     }
 
@@ -127,10 +141,19 @@ public class Display {
         pApplet.fill(255);
         pApplet.stroke(255);
 
-        pApplet.text(insult, pApplet.width / 2, (pApplet.height / 2) - 60);
+        if(insult.contains("discord moderator")) {
+            String[] contents = insult.split("\n");
+            pApplet.text(contents[0], pApplet.width / 2, (pApplet.height / 2) - 60);
+            pApplet.stroke(255, 0 , 0);
+            pApplet.fill(255, 0 ,0);
+            pApplet.text(contents[1], pApplet.width / 2, (pApplet.height / 2));
+        } else {
 
-        pApplet.textSize(12);
-        pApplet.text("(Click to play again)", pApplet.width / 2, pApplet.height - 16);
+            pApplet.text(insult, pApplet.width / 2, (pApplet.height / 2) - 60);
+
+            pApplet.textSize(12);
+            pApplet.text("(Click to play again)", pApplet.width / 2, pApplet.height - 16);
+        }
 
     }
 
@@ -165,6 +188,7 @@ public class Display {
 
         pApplet.line(pos.x, 0, pos.x, pApplet.height);
         pApplet.line(0, pos.y, pApplet.width, pos.y);
+        ball.draw();
     }
 
 }

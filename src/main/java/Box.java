@@ -11,7 +11,7 @@ public class Box extends Griddable{
 
     public Box(PApplet pApplet, Grid grid, int count) {
         super(pApplet, grid);
-        this.count = count;
+        this.count = Math.max(0, count);
     }
 
     public int count() {

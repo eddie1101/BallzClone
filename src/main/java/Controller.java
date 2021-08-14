@@ -8,10 +8,6 @@ public class Controller extends PApplet {
     GameStateMachine gsm;
     HighScoreHandler handler = new HighScoreHandler(path);
 
-    RayCaster rayCaster;
-
-    boolean cheatRay = false;
-
     public void settings() {
         size(392, 800);
     }
@@ -19,23 +15,18 @@ public class Controller extends PApplet {
     public void setup() {
         frameRate(60);
         gsm = new GameStateMachine(this, handler);
-        rayCaster = new RayCaster(this, gsm.grid());
+        gsm.initialize();
     }
 
     public void draw() {
         gsm.loop();
-        if(cheatRay) {
-            PVector home = new PVector(gsm.runner().home(), BallRunner.Y);
-            rayCaster.rayCast(home, new PVector(mouseX, mouseY), -1f);
-        }
     }
 
     public void keyPressed() {
         if(key == '\n') {
             gsm.initialize();
-            rayCaster = new RayCaster(this, gsm.grid());
-        } else if(key == ' ') {
-            cheatRay = !cheatRay;
+        } else if(key == ' ' ) {
+//            gsm.grid().rowShift(100);
         }
     }
 

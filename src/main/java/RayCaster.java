@@ -13,7 +13,7 @@ public class RayCaster {
     private boolean swity = false;
 
     private int depth = 0;
-    private int maxBounces = 1000;
+    private int maxBounces = 100;
 
     private PVector target;
     private PVector absoluteHome;
@@ -62,7 +62,7 @@ public class RayCaster {
 
     private void recursiveRayCast() {
 
-        System.out.println(depth++);
+        depth++;
 
         if(y >= pApplet.height || depth > maxBounces) {
             return;
@@ -113,25 +113,10 @@ public class RayCaster {
         for(Griddable ic: intersectionCandidates) {
             if(ic instanceof Box) {
                 Box box = (Box) ic;
-
-
                 float bx = box.getPos().x - Grid.HALF_CELL_WIDTH, by = box.getPos().y - Grid.HALF_CELL_WIDTH,
-                        cx = x, cy = y,
-                        testx = cx, testy = cy;
+                        cx = x, cy = y;
 
-                if(cx + Math.sqrt(Ball.R) < bx) testx = bx;
-                else if(cx - Math.sqrt(Ball.R)> bx + Grid.CELL_WIDTH) testx = bx + Grid.CELL_WIDTH;
-
-
-                if(cy + Math.sqrt(Ball.R) < by) testy = by;
-                else if(cy - Math.sqrt(Ball.R) > by + Grid.CELL_WIDTH) testy = by + Grid.CELL_WIDTH;
-
-                float distx = cx - testx;
-                float disty = cy - testy;
-
-                float distance = (float) Math.sqrt((distx * distx) + (disty + disty));
-
-                if (distance <= Math.sqrt(Ball.R)) {
+                if (GameHelper.boxCollision(thisIsAHack, box)) {
                     bx = box.getPos().x;
                     by = box.getPos().y;
 
@@ -148,7 +133,6 @@ public class RayCaster {
                     } else if( (theta >= -180 && theta <= -135) || (theta <= 180 && theta >= 135) ) {
                         side = 0;
                     }
-
                     return side;
                 }
             }

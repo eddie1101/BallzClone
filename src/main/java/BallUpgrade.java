@@ -3,8 +3,8 @@ import processing.core.PConstants;
 
 public class BallUpgrade extends Griddable {
 
-    public static final int INNER_R = 10;
-    public static final int OUTER_R = 20;
+    public static final int INNER_R = 20;
+    public static final int OUTER_R = 30;
 
     private boolean physical = true;
 

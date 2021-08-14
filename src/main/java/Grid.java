@@ -104,11 +104,11 @@ public class Grid {
 
     public Griddable[] generateNewRow(int difficulty) {
 
-        if(difficulty < 20) {
-            difficulty = 20;
+        if(difficulty < 1) {
+            difficulty = 1;
         }
 
-        int difficultyPortion = 100 - difficulty;
+        int offset = difficulty / 10 + 1;
 
         Random random = new Random();
         Griddable[] row = new Griddable[7];
@@ -117,33 +117,42 @@ public class Grid {
 
             int rand = random.nextInt(100);
 
-            if(rand < difficultyPortion) {
-                row[i] = new Box(pApplet, this, 0);
-            } else if(rand < 94) {
-                row[i] = new Box(pApplet, this, random.nextInt(difficulty) - 10);
-            } else if(rand < 100) {
-                row[i] = new BallUpgrade(pApplet, this);
+            if(rand < 30) {
+                row[i] = new Box(this.pApplet, this, 0);
+            } else if(rand < 40) {
+                row[i] = new BallUpgrade(this.pApplet, this);
+            } else {
+                row[i] = new Box(this.pApplet, this, difficulty + random.nextInt(offset + 1) - offset);
             }
-
         }
 
         boolean emptyFlag = true;
+        int upgradeCount = 0;
         for(Griddable griddable: row) {
             if(griddable instanceof Box) {
                 Box box = (Box) griddable;
                 if(box.count() > 0) {
                     emptyFlag = false;
-                    break;
                 }
-            } else {
+            } else if(griddable instanceof BallUpgrade){
                 emptyFlag = false;
-                break;
+                upgradeCount++;
             }
         }
 
         if(emptyFlag) {
             int rand = random.nextInt(7);
-            row[rand] = new Box(pApplet, this, random.nextInt(difficulty));
+            row[rand] = new Box(pApplet, this, difficulty);
+        }
+
+        if(upgradeCount > 1) {
+            for(int i = 0; i < COLS; i++) {
+                if(row[i] instanceof BallUpgrade) {
+                    row[i] = new Box(this.pApplet, this, 0);
+                    upgradeCount--;
+                }
+                if(upgradeCount <= 2) break;
+            }
         }
 
         return row;

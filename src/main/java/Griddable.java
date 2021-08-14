@@ -27,4 +27,11 @@ public abstract class Griddable extends Drawable {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Griddable)) return false;
+        Griddable g = (Griddable) o;
+        return g.cell == cell;
+    }
+
 }

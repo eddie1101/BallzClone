@@ -32,9 +32,9 @@ public class BallRunner {
 
     private boolean calculateFiringVelocity() {
         this.firingVelocity = new PVector(pApplet.mouseX - home, pApplet.mouseY - Y);
-//        if(firingVelocity.y / firingVelocity.x < 0.25) {
-//            return false;
-//        }
+        if(Math.abs(firingVelocity.y / firingVelocity.x) < 0.25 || pApplet.mouseY > Y) {
+            return false;
+        }
         firingVelocity.normalize().mult(4);
         return true;
     }
@@ -115,7 +115,7 @@ public class BallRunner {
             if(!idleBalls.contains(ball)) {
                 return false;
             } else {
-                if(ball.isTravelling()) {
+                if(ball.isTravelling() && ball.getExpireTime() > 0) {
                     return false;
                 }
             }
@@ -147,11 +147,17 @@ public class BallRunner {
         }
 
         for(Ball ball: balls) {
+
             ball.update();
 
             if(ball.getPos().y > Y + 10) {
                 if(idleBalls.isEmpty()) {
                     home = (int) ball.getPos().x;
+                    if(home < Ball.R) {
+                        home = (int) Ball.R;
+                    } else if(home > pApplet.width - Ball.R) {
+                        home = pApplet.width - (int) Ball.R;
+                    }
                 }
 
                 if(!ball.isTravelling())
@@ -160,7 +166,7 @@ public class BallRunner {
                     idleBalls.add(ball);
             } else {
 
-                Griddable[] testCollisions = GameHelper.getPhysicalsInCollisionRange(ball, physicals, 5);
+                Griddable[] testCollisions = GameHelper.getPhysicalsInCollisionRange(ball, physicals, (int) -Ball.R);
 
                 for (Griddable griddable : testCollisions) {
 
@@ -168,9 +174,14 @@ public class BallRunner {
 
                         Box box = (Box) griddable;
 
-                        if (GameHelper.boxCollision(ball, box)) {
+                        boolean collision = GameHelper.boxCollision(ball, box);
+
+                        if (collision && !ball.isCollidingWith(box)) {
+                            ball.addColliding(box);
                             box.decrement();
                             bounce(ball, box);
+                        } else if (!collision && ball.isCollidingWith(box)) {
+                            ball.removeColliding(box);
                         }
 
                     } else if (griddable instanceof BallUpgrade) {

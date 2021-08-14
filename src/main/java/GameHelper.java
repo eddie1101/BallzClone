@@ -9,19 +9,18 @@ public class GameHelper {
 
     public static boolean wallCollision(Ball ball) {
 
-        PVector vel = ball.getVel();
-
         if(ball.getPos().x - Math.sqrt(Ball.R) <= 0) {
-            ball.setVel(-vel.x, vel.y);
+            ball.vel.x *= -1;
         } else if(ball.getPos().x + Math.sqrt(Ball.R) >= 392) {
-            ball.setVel(-vel.x, vel.y);
+            ball.vel.x *= -1;
         }
 
         if(ball.getPos().y - Math.sqrt(Ball.R) <= 0) {
-            ball.setVel(vel.x, -vel.y);
-        } else if(ball.getPos().y + Math.sqrt(Ball.R) >= 800) {
-            ball.setVel(vel.x, -vel.y);
+            ball.vel.y *= -1;
         }
+//        else if(ball.getPos().y + Math.sqrt(Ball.R) >= 800) {
+//            ball.vel.y *= -1;
+//        }
 
         return false;
 
@@ -29,29 +28,45 @@ public class GameHelper {
 
     public static boolean ballUpgradeCollision(Ball ball, BallUpgrade circle) {
 
-        return ball.getPos().dist(circle.getPos()) < Ball.R + Grid.CIRCLE_R;
+        return ball.getPos().dist(circle.getPos()) < (Ball.R + BallUpgrade.OUTER_R) / 2;
 
     }
 
+//    public static boolean boxCollision(Ball ball, Box box) {
+//        float bx = box.getPos().x - Grid.HALF_CELL_WIDTH, by = box.getPos().y - Grid.HALF_CELL_WIDTH,
+//                cx = ball.pos.x, cy = ball.pos.y,
+//                testx = cx, testy = cy;
+//
+//        if(cx + Math.sqrt(Ball.R) < bx) testx = bx;
+//        else if(cx - Math.sqrt(Ball.R)> bx + Grid.CELL_WIDTH) testx = bx + Grid.CELL_WIDTH;
+//
+//
+//        if(cy + Math.sqrt(Ball.R) < by) testy = by;
+//        else if(cy - Math.sqrt(Ball.R) > by + Grid.CELL_WIDTH) testy = by + Grid.CELL_WIDTH;
+//
+//        float distx = cx - testx;
+//        float disty = cy - testy;
+//
+//        float distance = (float) Math.sqrt((distx * distx) + (disty + disty));
+//        return distance <= Math.sqrt(Ball.R);
+//    }
+
     public static boolean boxCollision(Ball ball, Box box) {
 
-        float bx = box.getPos().x - Grid.HALF_CELL_WIDTH, by = box.getPos().y - Grid.HALF_CELL_WIDTH,
-                cx = ball.getPos().x, cy = ball.getPos().y,
-                testx = cx, testy = cy;
+        double cdx = Math.abs(ball.pos.x - box.pos.x);
+        double cdy = Math.abs(ball.pos.y - box.pos.y);
 
-        if(cx + Math.sqrt(Ball.R) < bx) testx = bx;
-        else if(cx - Math.sqrt(Ball.R)> bx + Grid.CELL_WIDTH) testx = bx + Grid.CELL_WIDTH;
+        if(cdx > Grid.HALF_CELL_WIDTH + (Ball.R / 2)) return false;
+        if(cdy > Grid.HALF_CELL_WIDTH + (Ball.R / 2)) return false;
 
+        if(cdx <= Grid.HALF_CELL_WIDTH) return true;
+        if(cdy <= Grid.HALF_CELL_WIDTH) return true;
 
-        if(cy + Math.sqrt(Ball.R) < by) testy = by;
-        else if(cy - Math.sqrt(Ball.R) > by + Grid.CELL_WIDTH) testy = by + Grid.CELL_WIDTH;
+        double cornerDistSq =
+                Math.pow(cdx - Grid.HALF_CELL_WIDTH, 2) +
+                Math.pow(cdy - Grid.HALF_CELL_WIDTH, 2);
 
-        float distx = cx - testx;
-        float disty = cy - testy;
-
-        float distance = (float) Math.sqrt((distx * distx) + (disty + disty));
-
-        return distance <= Math.sqrt(Ball.R);
+        return cornerDistSq <= Ball.R;
     }
 
     public static int findBoxCollisionSide(Ball ball, Box box) {

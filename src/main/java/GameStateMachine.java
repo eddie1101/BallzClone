@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class GameStateMachine {
 
@@ -12,7 +13,6 @@ public class GameStateMachine {
 
     private boolean newHighScore = false;
     private boolean click = false;
-    private int difficulty;
     private int level;
     private int highscore;
 
@@ -31,7 +31,9 @@ public class GameStateMachine {
         this.pApplet = pApplet;
         this.hsh = hsh;
 
-        this.initialize();
+        grid = new Grid(this.pApplet);
+        display = new Display(this.pApplet, this.grid);
+        runner = new BallRunner(this.pApplet);
 
     }
 
@@ -46,10 +48,9 @@ public class GameStateMachine {
         runner.addBall(startingBall);
         runner.flushBallBuffer();
 
-        difficulty = 20;
         level = 1;
 
-        grid.rowShift(difficulty);
+        grid.rowShift(level);
 
         state = GameState.AIMING;
         nextState = state;
@@ -96,7 +97,13 @@ public class GameStateMachine {
                 nextState = GameState.AIMING;
                 break;
             case AIMING:
-                display.drawTargeting(runner);
+                PVector firingVelocity = new PVector(pApplet.mouseX - runner.home(), pApplet.mouseY - BallRunner.Y);
+                float m = Math.abs(firingVelocity.y / firingVelocity.x);
+                if(m >= 0.25 && pApplet.mouseY < BallRunner.Y) {
+                    display.handleTargeting(runner, true);
+                } else {
+                    display.handleTargeting(runner, false);
+                }
                 display.drawBalls(runner.getBalls());
 
                 if (click) {
@@ -118,8 +125,7 @@ public class GameStateMachine {
                 break;
             case TRANSITION:
                 display.transition();
-                this.level++;
-                if(grid.rowShift(difficulty++)) {
+                if(grid.rowShift(level++)) {
                     nextState = GameState.END;
                 } else {
                     nextState = GameState.AIMING;
